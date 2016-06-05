@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="blog-post">
+        <h2 class="blog-post-title"><a>Sample blog post</a></h2>
+        <p class="blog-post-meta">
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+            <span2>January1,2014</span2>
+            <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+            <span2>Python</span2>
+            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+            <span2>10views</span2>
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            <span2>2comments</span2>
+        </p>
+        <p>This blog post shows a few different types of content that's supported and styled with Bootstrap.
+            Basic typography, images, and code are all...</p>
+        <a class="get_detail" href="/detail/{{ id }}">...more</a>
+        <hr>
+    </div>
+    <div class="blog-post">
+        <h2 class="blog-post-title"><a>Sample blog post</a></h2>
+        <p class="blog-post-meta">
+            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+            <span2>January1,2014</span2>
+            <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+            <span2>Python</span2>
+            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+            <span2>10views</span2>
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            <span2>2comments</span2>
+        </p>
+        <p>This blog post shows a few different types of content that's supported and styled with Bootstrap.
+            Basic typography, images, and code are all...</p>
+        <a class="get_detail">...more</a>
+        <hr>
+    </div>
+{% endblock %}
