@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8"/>
+    <title>写文章</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='markdown/examples/css/style.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='markdown/css/editormd.css') }}"/>
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+<div id="layout">
+    <div class="blog_cont">
+        <div style="width:90%;margin: 10px auto;" class="title">
+            <input style="height:35px;width: 40%;font-size: 26px;" type="text" name="title" placeholder="请输入文章标题">
+        </div>
+        <div id="test-editormd">
+            <textarea style="display:none;"></textarea>
+        </div>
+        <div class="content_notice" style="width:90%;margin: 10px auto;"></div>
+        <div style="width:90%;margin: 10px auto;" class="tags">
+            <h3>添加标签</h3>
+            <input style="width:30%;height: 30px;" placeholder="多个标签请用英文‘,’隔开" />
+        </div>
+        <div style="width:90%;margin: 10px auto;">
+            <button
+                    style="margin-bottom: 20px;background: #1B3160;padding: 7px 10px;border-radius: 4px;border: 1px solid blue;color: rgb(255, 255, 255);font-weight: bold;"
+                    class="sub_cont btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">发布内容</button>
+        </div>
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="font-size: 35px;color: green;text-align: center;">
+              发布成功
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='markdown/examples/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='markdown/editormd.js') }}"></script>
+<script type="text/javascript">
+    var testEditor;
+    $(function () {
+        testEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 640,
+            syncScrolling: "single",
+            path: "../lib/"
+        });
+    });
+    $('.blog_cont .sub_cont').click(function(){
+        var title = $('.blog_cont .title input').val().replace(/^\s*/, '');
+        var cont = $('.blog_cont #test-editormd textarea').val().replace(/^\s*/, '');
+        var tags = $('.blog_cont .tags input').val();
+        if(title === ''){
+            if($('#t_notice').length === 0){
+                $('.blog_cont .title').append('<span id="t_notice" style="color:red;">题目不能为空</span>');
+            }
+            return false;
+        }
+
+        if(cont == ''){
+             if($('#c_notice').length === 0){
+                $('.blog_cont .content_notice').append('<div><span id="c_notice" style="color:red;">内容不能为空</span></div>');
+             }
+             return false;
+        }
+        $.post('/admin/article/add',{title:title, cont:cont, tags:tags})
+    });
+</script>
+</body>
+</html>

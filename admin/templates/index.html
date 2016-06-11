@@ -3,9 +3,9 @@
 <head>
     <title>博客后台</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="assets/css/dpl-min.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/css/bui-min.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/css/main-min.css" rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='assets/css/dpl-min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='assets/css/bui-min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='assets/css/main-min.css') }}" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 
@@ -34,10 +34,10 @@
 
     </ul>
 </div>
-<script type="text/javascript" src="assets/js/jquery-1.8.1.min.js"></script>
-<script type="text/javascript" src="assets/js/bui-min.js"></script>
-<script type="text/javascript" src="assets/js/common/main-min.js"></script>
-<script type="text/javascript" src="assets/js/config-min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/jquery-1.8.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/bui-min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/common/main-min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/config-min.js') }}"></script>
 <script>
     BUI.use('common/main', function () {
         var config = [
@@ -47,19 +47,19 @@
                     text: '系统管理',
                     items: [
                         {
-                            id: '2',
+                            id: '3',
                             text: '所有用户',
-                            href: 'Node/index.html'
+                            href: 'node/index'
                         },
                         {
-                            id: '3',
+                            id: '2',
                             text: '添加用户',
-                            href: 'Node/index.html'
+                            href: 'node/index'
                         },
                         {
                             id: '4',
                             text: '我的个人资料',
-                            href: 'Node/index.html'
+                            href: 'node/index'
                         }
                     ]
                 }]
@@ -71,24 +71,24 @@
                         text: '文章管理',
                         items: [
                             {
-                                id: '6',
+                                id: '9',
                                 text: '所有文章',
-                                href: 'Node/index.html'
+                                href: 'article/index'
                             },
                             {
                                 id: '7',
                                 text: '写文章',
-                                href: 'Role/index.html'
+                                href: 'article/add'
                             },
                              {
                                 id: '8',
                                 text: '标签',
-                                href: 'Menu/index.html'
+                                href: 'article/tags'
                             },
                             {
-                                id: '9',
+                                id: '6',
                                 text: '文章评论',
-                                href: 'Menu/index.html'
+                                href: 'article/comments'
                             }
                         ]
                 }]
