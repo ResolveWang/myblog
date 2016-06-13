@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8"/>
-    <title>写文章</title>
+    <title>编辑文章</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='markdown/examples/css/style.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='markdown/css/editormd.css') }}"/>
     <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
@@ -13,27 +13,39 @@
 <div id="layout">
     <div class="blog_cont">
         <div style="width:90%;margin: 10px auto;" class="title">
-            <input style="height:35px;width: 40%;font-size: 26px;" type="text" name="title" placeholder="请输入文章标题">
+            <input style="height:35px;width: 40%;font-size: 26px;" type="text" name="title" placeholder="请输入文章标题"
+                    {% if post %} value="{{ post.title }}" {% endif %}
+            >
         </div>
         <div id="test-editormd">
-            <textarea style="display:none;"></textarea>
+            <textarea style="display:none;">{% if post %}{{ post.markdown_source }}{% endif %}</textarea>
         </div>
         <div class="content_notice" style="width:90%;margin: 10px auto;"></div>
         <div style="width:90%;margin: 10px auto;" class="tags">
             <h3>添加标签</h3>
-            <input style="width:30%;height: 30px;" placeholder="多个标签请用英文‘,’隔开" />
+            <input style="width:30%;height: 30px;" placeholder="多个标签请用英文‘,’隔开"
+                   {% if post.tags %}value="{{ post.tags }}{% endif %}"/>
+        </div>
+        <div style="width:90%;margin: 10px auto;" class="category">
+            <h3>选择归类</h3>
+            <select style="width:5%;height: 30px;">
+                <option value="1"  {% if post.category_id == 1 %}selected{% endif %}>编程</option>
+                <option value="2" {% if post.category_id == 2 %}selected{% endif %}>读书</option>
+                <option value="3" {% if post.category_id == 3 %}selected{% endif %}>生活</option>
+            </select>
         </div>
         <div style="width:90%;margin: 10px auto;">
             <button
                     style="margin-bottom: 20px;background: #1B3160;padding: 7px 10px;border-radius: 4px;border: 1px solid blue;color: rgb(255, 255, 255);font-weight: bold;"
-                    class="sub_cont btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">发布内容</button>
+                    class="sub_cont btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">发布内容
+            </button>
         </div>
         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-          <div class="modal-dialog modal-sm">
-            <div class="modal-content" style="font-size: 35px;color: green;text-align: center;">
-              发布成功
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content" style="font-size: 35px;color: green;text-align: center;">
+                    发布成功
+                </div>
             </div>
-          </div>
         </div>
     </div>
 </div>
@@ -49,24 +61,29 @@
             path: "../lib/"
         });
     });
-    $('.blog_cont .sub_cont').click(function(){
+    $(".blog_cont .sub_cont").click(function () {
         var title = $('.blog_cont .title input').val().replace(/^\s*/, '');
         var cont = $('.blog_cont #test-editormd textarea').val().replace(/^\s*/, '');
+        var category = $('.blog_cont .category select').val();
         var tags = $('.blog_cont .tags input').val();
-        if(title === ''){
-            if($('#t_notice').length === 0){
+        if (title === '') {
+            if ($('#t_notice').length === 0) {
                 $('.blog_cont .title').append('<span id="t_notice" style="color:red;">题目不能为空</span>');
             }
             return false;
         }
 
-        if(cont == ''){
-             if($('#c_notice').length === 0){
+        if (cont == '') {
+            if ($('#c_notice').length === 0) {
                 $('.blog_cont .content_notice').append('<div><span id="c_notice" style="color:red;">内容不能为空</span></div>');
-             }
-             return false;
+            }
+            return false;
         }
-        $.post('/admin/article/add',{title:title, cont:cont, tags:tags})
+        {% if post %}
+            $.post('/admin/article/edit/{{ post.id }}', {title: title, cont: cont, tags: tags, category: category});
+        {% else %}
+            $.post('/admin/article/add', {title: title, cont: cont, tags: tags, category: category});
+        {% endif %}
     });
 </script>
 </body>
