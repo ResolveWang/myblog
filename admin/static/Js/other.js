@@ -29,3 +29,14 @@ $(function(){
         $("#right_hand").attr("style","right:-112px;top:-12px");
     });
 });
+var sub = function () {
+    var keyword = $('.form-inline .input-default').val().replace(/^\s*/, '');
+    if (keyword === '') {
+        if ($('#notice').length === 0) {
+            $('.form-inline').append('<div id="notice"><span style="color:red;">输入不能为空</span></div>');
+        }
+        return false;
+    } else {
+        return true;
+    }
+};

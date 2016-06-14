@@ -4,6 +4,8 @@ from flask import render_template, request, redirect, url_for
 from markdown import markdown
 from admin.models import Post, Tag, PostTag
 from admin.main import app, db
+from sqlalchemy import or_
+from gl import page_per_limit
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -18,10 +20,14 @@ def home():
 
 @app.route('/admin/article/index')
 def article_list():
-    posts = db.session.query(Post).all()
+    page_num = request.args.get('page_num')
+    if not page_num:
+        page_num = 1
+    paginate = Post.query.paginate(int(page_num), page_per_limit, True)
+    posts = paginate.items
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))
-    return render_template('/article/index.html', posts=posts)
+    return render_template('/article/index.html', pagination=paginate, posts=posts)
 
 
 @app.route('/admin/article/add', methods=['GET', 'POST'])
@@ -93,3 +99,27 @@ def article_showorhide(pid):
     post.status = 0 if post.status == 1 else 1
     db.session.commit()
     return redirect(url_for('article_list'))
+
+
+@app.route('/admin/article/search', methods=['GET', 'POST'])
+def article_search():
+    keyword = ''
+    page_num = 1
+    if request.method == 'POST':
+        keyword = request.form.get('keyword')
+
+    if request.method == 'GET':
+        keyword = request.args.get('keyword')
+        page_num = int(request.args.get('page_num'))
+
+    paginate = Post.query.filter(or_(Post.title.like('%' + keyword + '%'), Post.content.like('%' + keyword + '%'))) \
+        .paginate(page_num, page_per_limit, True)
+    posts = paginate.items
+    for p in posts:
+        p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))
+    return render_template('/article/search.html', pagination=paginate, posts=posts, keyword=keyword)
+
+
+@app.errorhandler(404)
+def page_not_fount(e):
+    return render_template('404.html')

@@ -3,7 +3,7 @@
 <head>
     <title>博客后台</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="icon" href="{{ url_for('static',filename='Images/favicon.ico') }}">
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}">
     <link href="{{ url_for('static', filename='assets/css/dpl-min.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ url_for('static', filename='assets/css/bui-min.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ url_for('static', filename='assets/css/main-min.css') }}" rel="stylesheet" type="text/css"/>
@@ -23,9 +23,6 @@
         </div>
         <ul id="J_Nav" class="nav-list ks-clear">
             <li class="nav-item dl-selected">
-                <div class="nav-item-inner nav-home">系统管理</div>
-            </li>
-            <li class="nav-item dl-selected">
                 <div class="nav-item-inner nav-order">文章管理</div>
             </li>
             <!-- todo:把访客的地域用可视化的方式展示出来  -->
@@ -43,29 +40,6 @@
     BUI.use('common/main', function () {
         var config = [
             {
-                id: '1',
-                menu: [{
-                    text: '系统管理',
-                    items: [
-                        {
-                            id: '3',
-                            text: '所有用户',
-                            href: 'node/index'
-                        },
-                        {
-                            id: '2',
-                            text: '添加用户',
-                            href: 'node/index'
-                        },
-                        {
-                            id: '4',
-                            text: '我的个人资料',
-                            href: 'node/index'
-                        }
-                    ]
-                }]
-            },
-            {
                 id: '5',
                 homePage: '9',
                 menu: [{
@@ -80,11 +54,6 @@
                                 id: '7',
                                 text: '写文章',
                                 href: 'article/add'
-                            },
-                             {
-                                id: '8',
-                                text: '标签',
-                                href: 'article/tags'
                             },
                             {
                                 id: '6',

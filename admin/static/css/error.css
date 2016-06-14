@@ -1,0 +1,62 @@
+BODY {
+	BACKGROUND: #dad9d7;
+}
+
+IMG {
+	BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+
+A  {
+	CURSOR: pointer;
+    text-decoration: none;
+}
+UL {
+	LIST-STYLE-TYPE: none
+}
+LI {
+	LIST-STYLE-TYPE: none
+}
+TABLE {
+	TABLE-LAYOUT: fixed
+}
+TABLE TR TD {
+	WORD-BREAK: break-all; WORD-WRAP: break-word
+}
+A:hover {
+	TEXT-DECORATION: none;
+}
+
+.bg{
+	BACKGROUND: url('../images/01.jpg') #dad9d7 no-repeat center top; LEFT: 0; OVERFLOW: hidden; WIDTH: 100%; POSITION: absolute; TOP: 0; HEIGHT: 600px;
+}
+.cont {
+	MARGIN: 0px auto; WIDTH: 500px; LINE-HEIGHT: 20px
+}
+.c1 {
+	HEIGHT: 360px; TEXT-ALIGN: center
+}
+.c1 .img1 {
+	MARGIN-TOP: 180px
+}
+.cont H2 {
+	FONT-WEIGHT: normal; FONT-SIZE: 18px; COLOR: #555; HEIGHT: 35px; TEXT-ALIGN: center
+}
+.c2 {
+	HEIGHT: 35px; TEXT-ALIGN: center
+}
+.c2 A {
+	DISPLAY: inline-block; FONT-SIZE: 14px; MARGIN: 0 4px; COLOR: #626262; PADDING-TOP: 1px; HEIGHT: 23px; TEXT-ALIGN: left; TEXT-DECORATION: none
+}
+.c2 A:hover {
+	COLOR: #626262; TEXT-DECORATION: none
+}
+
+.c2 A.re {
+	PADDING-LEFT: 30px; BACKGROUND: url('../images/03.png'); WIDTH: 66px
+}
+.c2 A.re:hover {
+	BACKGROUND: url('../images/03.png') 0 -24px
+}
+.c2 A.re:active {
+	BACKGROUND: url('../images/03.png') 0 -48px
+}

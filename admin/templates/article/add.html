@@ -80,9 +80,14 @@
             return false;
         }
         {% if post %}
-            $.post('/admin/article/edit/{{ post.id }}', {title: title, cont: cont, tags: tags, category: category});
+            $.post('/admin/article/edit/{{ post.id }}', {title: title, cont: cont, tags: tags, category: category},
+            function () {
+                location.assign('/admin/article/index');
+            });
         {% else %}
-            $.post('/admin/article/add', {title: title, cont: cont, tags: tags, category: category});
+            $.post('/admin/article/add', {title: title, cont: cont, tags: tags, category: category}, function () {
+                location.assign('/admin/article/index');
+            });
         {% endif %}
     });
 </script>

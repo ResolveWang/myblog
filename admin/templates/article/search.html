@@ -1,0 +1,16 @@
+{% extends '/article/base.html' %}
+{% block head_info %}
+    <div class="form-inline definewidth m20">
+    <h2>关于&nbsp;{{ keyword }}&nbsp;的搜索结果</h2>
+</div>
+{% endblock %}
+
+{% block prev_page %}
+    <a href="{{ url_for('article_search', page_num=pagination.prev_num, keyword=keyword) }}">上一页</a>
+{% endblock %}
+{% block cur_page %}
+    <a href="{{ url_for('article_search', page_num=page, keyword=keyword) }}">{{ page }}</a>
+{% endblock %}
+{% block next_page %}
+    <a href="{{ url_for('article_search', page_num=pagination.next_num, keyword=keyword) }}">下一页</a>
+{% endblock %}
