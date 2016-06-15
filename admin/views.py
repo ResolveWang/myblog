@@ -1,24 +1,47 @@
 import time
 import bleach
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify, flash
+from flask_login import login_user, logout_user, login_required
 from markdown import markdown
-from admin.models import Post, Tag, PostTag
+from admin.models import Post, Tag, PostTag, User
 from admin.main import app, db
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from gl import page_per_limit
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    if request.method == 'POST':
+        username = request.values.get('username')
+        password = request.values.get('password')
+        remember_me = True if request.values.get('remember_me') == 'true' else False
+        user = User.query.filter(and_(User.name == username, User.password == password)).first()
+        if user is not None:
+            login_user(user, remember=remember_me)
+            return jsonify(redirect_url=url_for('admin_index'), results='success')
+        else:
+            return jsonify(results='fail')
+    else:
+        return render_template('/login.html')
+
+
+@app.route('/admin/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('你已经退出登录了')
+    return redirect(url_for('login'))
 
 
 @app.route('/admin/')
-def home():
+@app.route('/admin/index')
+@login_required
+def admin_index():
     return render_template('index.html')
 
 
 @app.route('/admin/article/index')
+@login_required
 def article_list():
     page_num = request.args.get('page_num')
     if not page_num:
@@ -31,6 +54,7 @@ def article_list():
 
 
 @app.route('/admin/article/add', methods=['GET', 'POST'])
+@login_required
 def article_add():
     if request.method == 'POST':
         title = request.values.get('title')
@@ -58,6 +82,7 @@ def article_add():
 
 
 @app.route('/admin/article/edit/<string:pid>', methods=['GET', 'POST'])
+@login_required
 def article_edit(pid):
     post = db.session.query(Post).filter_by(id=int(pid)).first()
     if request.method == 'POST':
@@ -86,6 +111,7 @@ def article_edit(pid):
 
 
 @app.route('/admin/article/delete/<string:pid>')
+@login_required
 def article_delete(pid):
     post = db.session.query(Post).filter_by(id=int(pid)).first()
     db.session.delete(post)
@@ -94,6 +120,7 @@ def article_delete(pid):
 
 
 @app.route('/admin/article/show/<string:pid>')
+@login_required
 def article_showorhide(pid):
     post = db.session.query(Post).filter_by(id=int(pid)).first()
     post.status = 0 if post.status == 1 else 1
@@ -102,6 +129,7 @@ def article_showorhide(pid):
 
 
 @app.route('/admin/article/search', methods=['GET', 'POST'])
+@login_required
 def article_search():
     keyword = ''
     page_num = 1
@@ -123,3 +151,8 @@ def article_search():
 @app.errorhandler(404)
 def page_not_fount(e):
     return render_template('404.html')
+
+
+@app.errorhandler(500)
+def page_not_fount(e):
+    return render_template('500.html')

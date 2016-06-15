@@ -1,48 +1,74 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<HTML
-        xmlns="http://www.w3.org/1999/xhtml">
-<HEAD>
-    <META content="IE=11.0000" http-equiv="X-UA-Compatible">
-    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <TITLE>管理登录</TITLE>
-    <SCRIPT src="{{ url_for('static', filename='js/jquery.js') }}" type="text/javascript"></SCRIPT>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/login.css') }}" type="text/css"/>
-    <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}">
-    <SCRIPT type="text/javascript" src="{{ url_for('static', filename='js/other.js') }}"></SCRIPT>
-</HEAD>
-<BODY class="login">
-<DIV class="top_div"></DIV>
-<DIV class="" style="background: rgb(255, 255, 255); margin: -100px auto auto; border: 1px solid rgb(231, 231, 231); border-image: none; width: 400px; height: 200px; text-align: center;">
-    <DIV class="logo" style="width: 165px; height: 96px; position: absolute;">
-        <DIV class="tou"></DIV>
-        <DIV class="initial_left_hand" id="left_hand"></DIV>
-        <DIV class="initial_right_hand" id="right_hand"></DIV>
-    </DIV>
-    <div class="form_data">
-    <P style="padding: 30px 0px 10px; position: relative;"><SPAN
-            class="u_logo"></SPAN> <INPUT class="ipt" type="text" placeholder="请输入用户名" value="">
-    </P>
-    <P style="position: relative;"><SPAN class="p_logo"></SPAN>
-        <INPUT class="ipt" id="password" type="password" placeholder="请输入密码" value="">
-    </P>
-    <DIV style="height: 50px; line-height: 50px; margin-top: 30px; border-top-color: rgb(231, 231, 231); border-top-width: 1px; border-top-style: solid;">
-        <P style="margin: 0px 35px 20px 45px;"><SPAN style="float: left;"><A class="to_home"
-                                                                             href="http://www.rookiefly.me">回到首页?</A></SPAN>
-           <SPAN class="sub" style="float: right;">
-              <button class='mylogin' href="/admin">登录</button>
-           </SPAN></P></DIV>
-    </div>
-</DIV>
-<script type="application/javascript">
-    var name = $('.login .form_data .ipt').val();
-    var password = $('.login .form_data #password');
-    $('.login .form_data .sub .mylogin').click(function () {
-                alert(name);
+﻿<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 lt8"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7 lt8"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8 lt8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="UTF-8"/>
+    <title>MyBlog后台登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Codrops"/>
+    <link rel="shortcut icon" href="{{ url_for('static',filename='images/favicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/login.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>&nbsp;</h1>
+    </header>
+    <section>
+        <div id="container_demo">
+            <a class="hiddenanchor" id="toregister"></a>
+            <a class="hiddenanchor" id="tologin"></a>
+            <div id="wrapper">
+                <div id="login" class="animate form">
+                    <form onsubmit="return false;">
+                        <h1>后台登录</h1>
+                        <p>
+                            <label for="username" class="uname" data-icon="u"> 用户名 </label>
+                            <input id="username" name="username" required="required" type="text" placeholder="请输入用户名"/>
+                        </p>
+                        <p>
+                            <label for="password" class="youpasswd" data-icon="p"> 密码 </label>
+                            <input id="password" name="password" required="required" type="password" placeholder="请输入密码"/>
+                        </p>
+                          <div class="login_notice" style="color: red;margin:10px 0;"></div>
+                        <p class="keeplogin">
+                            <input type="checkbox" name="loginkeeping" id="loginkeeping" checked/>
+                            <label for="loginkeeping">记住密码</label>
+                        </p>
+                        <p class="login button">
+                            <input type="submit" value="登录"/>
+                        </p>
+                        <p class="change_link">
+                            回到博客首页？
+                            <a href="http://localhost:80/" class="to_register">GO</a>
+                        </p>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+<script>
+    $('#login .login').click(function(){
+        var username = $('#username').val().replace('/^\s*/', '');
+        var password = $('#password').val();
+        var remember_me = $('#loginkeeping').is(':checked');
+        $.post('{{ url_for("login") }}',{username:username, password:password, remember_me:remember_me},function (data) {
+            if(data.results == 'success' ){
+                location.assign(data.redirect_url);
+            }else{
+                if($('form .login_notice span').length === 0 && username && password){
+                    $('form .login_notice').append('<span>用户名或者密码错误</span>');
+                }
             }
-
-    )
-
+        })
+    })
 </script>
-</BODY>
-</HTML>
+</html>

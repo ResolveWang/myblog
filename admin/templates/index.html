@@ -12,9 +12,14 @@
 
 <div class="header">
 
-    <div class="dl-log">欢迎您，<span class="dl-log-user">root</span><a href="/chinapost/index.php?m=Public&a=logout"
-                                                                    title="退出系统" class="dl-log-quit">[退出]</a>
+    <div class="dl-log">欢迎您，<span class="dl-log-user">{{ current_user.name }}</span>
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('logout') }}" title="退出系统" class="dl-log-quit">[登出]</a>
+    {% else %}
+        <a href="{{ url_for('login') }}">[登录]</a>
+    {% endif %}
     </div>
+
 </div>
 <div class="content">
     <div class="dl-main-nav">

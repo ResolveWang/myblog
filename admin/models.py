@@ -1,4 +1,6 @@
 from admin.main import db
+from flask_login import UserMixin
+from admin.main import login_manager
 
 
 class Post(db.Model):
@@ -48,3 +50,21 @@ class PostTag(db.Model):
     def __init__(self, post_id, tag_id):
         self.post_id = post_id
         self.tag_id = tag_id
+
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    level = db.Column(db.Integer)
+    status = db.Column(db.Integer)
+    password = db.Column(db.String)
+
+    def __init__(self, name, password, level):
+        self.name = name
+        self.password = password
+        self.level = level
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
