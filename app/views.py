@@ -1,24 +1,46 @@
-from flask import render_template
+import time
+from html.parser import unescape
+from flask import render_template, request
 from app.main import app
+from gl import page_per_limit
+from app.models import Post
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('home.html', title='首页')
+    page_num = request.args.get('page_num')
+    if not page_num or int(page_num) < 1:
+        page_num = 1
+    paginate = Post.query.order_by(Post.post_time.desc()).paginate(int(page_num), page_per_limit, True)
+    posts = paginate.items
+    for p in posts:
+        p.post_time = time.strftime('%Y-%m-%d', time.localtime(p.post_time))
+        p.content = unescape(p.content)
+    return render_template('home.html', title='首页',  posts=posts, pagination=paginate)
 
 
-@app.route('/category/<string:category>')
-def category_program(category):
-    if category == 'program':
-        bt = '编程'
-    elif category == 'reading':
-        bt = '读书'
-    elif category == 'life':
-        bt = '生活'
-    else:
-        return render_template('404.html')
-    return render_template('type.html', title='分类', type=bt)
+@app.route('/detail/<int:pid>')
+def get_detail(pid):
+    post = Post.query.filter_by(id=pid).first_or_404()
+    pre_post = Post.query.order_by(Post.id.desc()).filter(Post.id < pid).first()
+    next_post = Post.query.order_by(Post.id.asc()).filter(Post.id > pid).first()
+    post.post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
+    post.content = unescape(post.content)
+    return render_template('detail.html', p=post, pre_post=pre_post, next_post=next_post)
+
+
+@app.route('/category/<int:cid>/page/<int:page_num>')
+def get_bycategory(cid, page_num):
+    if not page_num or int(page_num) < 1:
+        page_num = 1
+    paginate = Post.query.order_by(Post.post_time.desc()).filter_by(category_id=cid).paginate(int(page_num),
+                                                                                              page_per_limit, True)
+    posts = paginate.items
+    for p in posts:
+        p.post_time = time.strftime('%Y-%m-%d', time.localtime(p.post_time))
+        p.content = unescape(p.content)
+    return render_template('type.html', title='分类', posts=posts, pagination=paginate, cid=cid)
 
 
 @app.route('/archive')
@@ -29,11 +51,6 @@ def archive():
 @app.route('/about')
 def about():
     return render_template('about.html', title='关于作者')
-
-
-@app.route('/detail/<string:blog_id>')
-def get_detail(blog_id):
-    return render_template('detail.html', title='博客题目')
 
 
 @app.errorhandler(404)

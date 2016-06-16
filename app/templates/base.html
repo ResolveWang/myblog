@@ -6,15 +6,8 @@
                 {% block content %}
                 {% endblock %}
             </div>
-            <nav>
-                {% block page %}
-                <ul class="pager">
-                    <li><a href="#">前一页</a></li>
-                    <li><a href="#">后一页</a></li>
-                </ul>
-                {% endblock %}
-            </nav>
-
+            {% block page_nagite %}
+            {% endblock %}
         </div>
 
     {% include 'right.html' %}

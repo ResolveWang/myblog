@@ -1,54 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="blog-notice">
-                正在查看关于{{ type }}的文章
-    </div>
-    <div class="blog-archive">
-        <h2 class="blog-post-time">2016</h2>
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-3 time">2016/01/03</div>
-            <div class="col-md-1"></div>
-            <div class="col-md-7 title"><a>关于测试点事儿</a></div>
+    {% for p in posts %}
+        <div class="blog-post">
+            <h2 class="blog-post-title"><a class="article_link" title="查看详细"
+                                           href="{{ url_for('get_detail', pid=p.id) }}">{{ p.title }}</a></h2>
+            {% include 'meta.html' %}
+            <p>{{ p.content | striptags | truncate(200, false, '...') }}</p>
+            <p><a class="get_detail" href="{{ url_for('get_detail', pid=p.id) }}" title="查看详细信息">more</a></p>
+            <hr>
         </div>
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-3 time">2016/01/03</div>
-            <div class="col-md-1"></div>
-            <div class="col-md-7 title"><a>关于测试点事儿</a></div>
-        </div>
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-3 time">2016/01/03</div>
-            <div class="col-md-1"></div>
-            <div class="col-md-7 title"><a>关于测试点事儿</a></div>
-        </div>
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-3 time">2016/01/03</div>
-            <div class="col-md-1"></div>
-            <div class="col-md-7 title"><a>关于测试点事儿</a></div>
-        </div>
-    </div>
+    {% endfor %}
 {% endblock %}
-
-{% block page %}
-    <div class="col-md-2"></div>
-    <ul class="pagination">
-    <li class="disabled">
-      <a href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">4</a></li>
-    <li><a href="#">5</a></li>
-    <li>
-      <a href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
+{% block page_nagite %}
+<nav>
+                {% block page %}
+                <ul class="pager">
+                    <li {% if not pagination.has_prev %} class="disabled" {% endif %}>
+                        <a href="{{ url_for('get_bycategory', cid=cid, page_num=pagination.prev_num) }}">前一页</a>
+                    </li>
+                    <li{% if not pagination.has_next %} class="disabled" {% endif %}>
+                        <a href="{{ url_for('get_bycategory', cid=cid, page_num=pagination.next_num) }}">后一页</a>
+                    </li>
+                </ul>
+                {% endblock %}
+            </nav>
 {% endblock %}

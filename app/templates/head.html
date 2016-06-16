@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="myblog">
+    <meta name="author" content="resolvewang">
     <link rel="icon" href="{{ url_for('static', filename='pic/favicon.ico') }}">
     <title>{{ title }}</title>
     <link href="{{ url_for('static', filename='css/blog.css') }}" rel="stylesheet">
@@ -21,16 +21,16 @@
     <div class="container">
         <nav id="bs-navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">首页</a></li>
+                <li class="active"><a href="{{ url_for('index') }}">首页</a></li>
                 <li role="presentation" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                        aria-expanded="false">
                         分类 <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" id="types">
-                        <li><a href="/category/program">编程</a></li>
-                        <li><a href="/category/reading">读书</a></li>
-                        <li><a href="/category/life">生活</a></li>
+                        <li><a href="{{ url_for('get_bycategory', cid=1, page_num=1) }}">编程</a></li>
+                        <li><a href="{{ url_for('get_bycategory', cid=2, page_num=1) }}">读书</a></li>
+                        <li><a href="{{ url_for('get_bycategory', cid=3, page_num=1) }}">生活</a></li>
                     </ul>
                 </li>
                 <li><a href="/archive">归档</a></li>
@@ -38,7 +38,8 @@
             </ul>
         </nav>
         <div class="blog-header">
-            <h5 class="blog-title"><a href="/">ResolveWang's Blog</a></h5>
+            <h5  class="blog-title"><a href="{{ url_for('index') }}" title="回到首页" style="text-decoration: none">
+                ResolveWang's Blog</a></h5>
             <p class="lead blog-description">welcome to resolvewang's blog</p>
         </div>
     </div>

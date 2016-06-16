@@ -7,6 +7,7 @@ body {
   color: #555;
 }
 
+
 h1, .h1,
 h2, .h2,
 h3, .h3,
@@ -82,12 +83,21 @@ h6, .h6 {
   padding-top: 20px;
   padding-bottom: 20px;
 }
-.blog-title {
+
+.blog-title a{
   margin-top: 30px;
   margin-bottom: 0;
   font-size: 45px;
   font-weight: normal;
+  color:#337ab7;
+  text-decoration: none;
 }
+
+.blog-title a:hover{
+  cursor:pointer;
+  text-decoration: none;
+}
+
 .blog-description {
   font-size: 20px;
   color: #999;
@@ -153,6 +163,13 @@ h6, .h6 {
   text-decoration: none;
 }
 
+
+
+.blog-post .blog-post-title a:hover{
+  color:#23527c;
+  cursor:pointer;
+  text-decoration: none;
+}
 .blog-post-meta {
   margin-bottom: 20px;
   color: #999;
@@ -183,14 +200,6 @@ h6, .h6 {
   margin-left: -15px;
 }
 
-.container .blog-main .blog-post .blog-post-title a{
-  color: #555;
-}
-.container .blog-post .blog-post-title a:hover{
-  color: #337ab7;
-  cursor: pointer;
-}
-
 .container .blog-post .get_detail{
   color: #337ab7;
   text-decoration: none;
@@ -198,16 +207,7 @@ h6, .h6 {
 
 .container .blog-post .get_detail:hover{
   cursor: pointer;
-  color: blue;
-}
-
-#top .blog-header a:hover{
-  cursor: pointer;
-  color: #337ab7;
-}
-#top .blog-header a{
-  text-decoration: none;
-  color: #555;
+  color:#23527c;
 }
 
 #types li a{
@@ -241,5 +241,13 @@ h6, .h6 {
 }
 
 .container .cont{
-  margin-bottom: 4em;
+  margin-bottom: 3em;
+}
+
+.page_nagite a{
+  text-decoration: none;
+}
+
+.page_nagite a:hover{
+  text-decoration: none;
 }
