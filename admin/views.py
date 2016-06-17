@@ -1,5 +1,6 @@
 import time
 import bleach
+from random import randint
 from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_user, logout_user, login_required
 from markdown import markdown
@@ -46,7 +47,7 @@ def article_list():
     page_num = request.args.get('page_num')
     if not page_num:
         page_num = 1
-    paginate = Post.query.paginate(int(page_num), page_per_limit, True)
+    paginate = Post.query.order_by(Post.id.desc()).paginate(int(page_num), page_per_limit, True)
     posts = paginate.items
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))
@@ -73,7 +74,9 @@ def article_add():
         for tag in tags:
             t = Tag.query.filter_by(name=tag).first()
             if not t and tag.strip() != '':
-                t = Tag(name=tag)
+                size = randint(12, 20)
+                rgb = 'rgb({R},{G},{B})'.format(R=randint(0, 254), G=randint(0, 254), B=randint(0, 254))
+                t = Tag(name=tag, size=size, RGB=rgb)
                 db.session.add(t)
                 db.session.flush()
             db.session.add(PostTag(post.id, t.id))

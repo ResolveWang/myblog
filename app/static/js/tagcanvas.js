@@ -1947,7 +1947,7 @@
 $(document).ready(function () {
     $("#my3DTags").tagcanvas({
         textFont: "Georgia,Optima",
-        textColour: 'blue',
+        textColour: '',
         outlineColour: "orange",
         weight: !0,
         reverse: !0,
@@ -1957,3 +1957,4 @@ $(document).ready(function () {
         freezeDecel: !0
     }, "tags") || $("#myTags").hide()
 });
+ 

@@ -31,9 +31,13 @@ class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
+    size = db.Column(db.Integer)
+    RGB = db.Column(db.String)
 
-    def __init__(self, name):
+    def __init__(self, name, size, RGB):
         self.name = name
+        self.size = size
+        self.RGB = RGB
 
     def __repr__(self):
         return 'name:'+self.name
