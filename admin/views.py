@@ -60,26 +60,28 @@ def article_add():
     if request.method == 'POST':
         title = request.values.get('title')
         tags_str = request.values.get('tags')
-        tags = tags_str.split(',')
         category = int(request.values.get('category'))
         cont = request.values.get('cont')
         cont_html = bleach.linkify(bleach.clean(
-           markdown(cont)
+            markdown(cont)
         ))
         post_time = int(time.time())
-        post = Post(title=title, cont=cont_html, marksource=cont, post_time=post_time, category=category, tags_str=tags_str)
+        post = Post(title=title, cont=cont_html, marksource=cont, post_time=post_time, category=category,
+                    tags_str=tags_str)
         db.session.add(post)
         # 下面这行代码用于获取自增长的主键
         db.session.flush()
-        for tag in tags:
-            t = Tag.query.filter_by(name=tag).first()
-            if not t and tag.strip() != '':
-                size = randint(12, 20)
-                rgb = 'rgb({R},{G},{B})'.format(R=randint(0, 254), G=randint(0, 254), B=randint(0, 254))
-                t = Tag(name=tag, size=size, RGB=rgb)
-                db.session.add(t)
-                db.session.flush()
-            db.session.add(PostTag(post.id, t.id))
+        if tags_str != '':
+            tags = tags_str.split(',')
+            for tag in tags:
+                t = Tag.query.filter_by(name=tag).first()
+                if not t and tag.strip() != '':
+                    size = randint(12, 20)
+                    rgb = 'rgb({R},{G},{B})'.format(R=randint(0, 254), G=randint(0, 254), B=randint(0, 254))
+                    t = Tag(name=tag, size=size, RGB=rgb)
+                    db.session.add(t)
+                    db.session.flush()
+                db.session.add(PostTag(post.id, t.id))
         db.session.commit()
     return render_template('/article/add.html', post=None)
 

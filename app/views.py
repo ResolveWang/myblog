@@ -74,9 +74,36 @@ def archive():
     return render_template('archive.html', title='归档', datas=datas, pagination=paginate, hot=hot_posts, tags=tags)
 
 
+@app.route('/tag/<int:tid>')
+def get_bytag(tid):
+    page_num = request.args.get('page_num')
+    if not page_num or int(page_num) < 1:
+        page_num = 1
+    paginate = Post.query.filter_by(status=1).filter(Post.id == PostTag.post_id).filter(PostTag.tag_id == tid).\
+        order_by(Post.post_time.desc()).paginate(int(page_num), page_per_limit, True)
+    posts = paginate.items
+    datas = []
+    flag = ''
+    for post in posts:
+        post.post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
+        year = post.post_time[0:4]
+        if year != flag:
+            flag = year
+            datas.append({'post': post, 'year': year})
+        else:
+            datas.append({'post': post, 'year': ''})
+    hot_posts = _get_hot()
+    tags = _get_tags()
+    return render_template('archive.html', title='标签', datas=datas, pagination=paginate, hot=hot_posts, tags=tags)
+
+
 @app.route('/about')
 def about():
-    return render_template('about.html', title='关于作者')
+    hot_posts = _get_hot()
+    tags = _get_tags()
+    post = Post.query.filter_by(title='blog').first_or_404()
+    post.content = unescape(post.content)
+    return render_template('about.html', title='关于作者', hot=hot_posts, tags=tags, post=post)
 
 
 @app.errorhandler(404)

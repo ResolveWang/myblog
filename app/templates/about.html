@@ -1,25 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="blog-post">
-        <h2 class="blog-post-title">{{ p.title }}</h2>
-        {% include 'meta.html' %}
-        {{ p.content | safe }}
+{#        <h2 class="blog-post-title">关于我</h2>#}
+{#        <hr>#}
+        {{ post.content|safe }}
     </div>
-{% endblock %}
-{% block page_nagite %}
-    <nav class="page_nagite">
-        {% block page %}
-            {% if pre_post %}
-                <p>前一篇:<a href="{{ url_for('get_detail', pid=pre_post.id) }}">{{ pre_post.title }}</a></p>
-            {% endif %}
-            {% if next_post %}
-                <p>后一篇:<a href="{{ url_for('get_detail', pid=next_post.id) }}">{{ next_post.title }}</a></p>
-            {% endif %}
-        {% endblock %}
-    </nav>
-
-    <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="{{ p.id }}" data-title="{{ p.title }}" data-url="{{ url_for('get_detail', pid=p.id) }}"></div>
+        <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="{{ post.id }}" data-title="{{ post.title }}" data-url="{{ url_for('get_detail', pid=post.id) }}"></div>
     <!-- 多说评论框 end -->
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
     <script type="text/javascript">
@@ -35,5 +22,5 @@
         })();
     </script>
     <!-- 多说公共JS代码 end -->
-
 {% endblock %}
+

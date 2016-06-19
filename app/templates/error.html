@@ -11,6 +11,10 @@
 <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
+<script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <link href="{{ url_for('static',filename='css/base_error.css') }}" rel="stylesheet" type="text/css" />
 {% if title == '500' %}
 <link href="{{ url_for('static',filename='css/500.css') }}" rel="stylesheet" type="text/css" />
@@ -24,16 +28,16 @@
     <div class="container">
         <nav id="bs-navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">首页</a></li>
+                <li class="active"><a href="{{ url_for('index') }}">首页</a></li>
                 <li role="presentation" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                        aria-expanded="false">
                         分类 <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" id="types">
-                        <li><a href="/category/program">编程</a></li>
-                        <li><a href="/category/reading">读书</a></li>
-                        <li><a href="/category/life">生活</a></li>
+                        <li><a href="{{ url_for('get_bycategory', cid=1, page_num=1) }}">编程</a></li>
+                        <li><a href="{{ url_for('get_bycategory', cid=2, page_num=1) }}">读书</a></li>
+                        <li><a href="{{ url_for('get_bycategory', cid=3, page_num=1) }}">生活</a></li>
                     </ul>
                 </li>
                 <li><a href="/archive">归档</a></li>
@@ -41,7 +45,8 @@
             </ul>
         </nav>
         <div class="blog-header">
-            <h5 class="blog-title"><a>ResolveWang's Blog</a></h5>
+            <h5  class="blog-title"><a href="{{ url_for('index') }}" title="回到首页" style="text-decoration: none">
+                ResolveWang's Blog</a></h5>
             <p class="lead blog-description">welcome to resolvewang's blog</p>
         </div>
     </div>
@@ -50,14 +55,14 @@
 <div id="main">
     <!-- header -->
     <div id="header">
-        <h1>{{ message }}<span><a href="/">返回首页</a></span></h1>
+        <h1>{{ message }}</h1>
     </div>
     <!-- content -->
     <div id="content">
         <ul class="nav">
-            <li class="home"><a href="/about">关于作者</a></li>
-            <li class="site_map"><a href="/archive">归档</a></li>
-            <li class="search"><a href="/category/program">分类</a></li>
+            <li class="home"><a href="{{ url_for('index') }}">返回首页</a></li>
+            <li class="site_map"><a href="{{ url_for('about') }}">联系作者</a></li>
+            <li class="search"><a href="{{ url_for('archive') }}">查看归档</a></li>
         </ul>
     </div>
 </div>

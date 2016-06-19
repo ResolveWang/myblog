@@ -6,7 +6,9 @@
             <div class="tags" id="tags" style="display:none;width: 40px;">
                 <ul>
                     {% for tag in tags %}
-                        <li><a style="font-size:{{ tag.size }}px;color:{{ tag.RGB }};">{{ tag.name }}</a></li>
+                        <li>
+                            <a style="font-size:{{ tag.size }}px;color:{{ tag.RGB }};" href="{{ url_for('get_bytag', tid=tag.id) }}">{{ tag.name }}</a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
