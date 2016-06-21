@@ -119,8 +119,8 @@ def server_error(e):
 
 
 def _get_hot():
-    return Post.query.filter_by(status=1).order_by(Post.view_counts.desc(), Post.comment_counts.desc(),
-                                                   Post.post_time.desc()).limit(gl.hot_page_limit).offset(0)
+    return Post.query.filter_by(status=1).filter(Post.category_id > 0 ).order_by(Post.view_counts.desc(),
+                                 Post.comment_counts.desc(), Post.post_time.desc()).limit(gl.hot_page_limit).offset(0)
 
 
 def _get_tags():
