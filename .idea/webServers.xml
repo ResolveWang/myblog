@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="134c104f-d571-486a-a4b1-2e49f53317b9" name="blog" url="http://115.29.136.51">
+        <fileTransfer host="115.29.136.51" port="8999" accessType="SFTP" password="df9bdf98df99df9edf9fdf9c" username="wpm">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="8999" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -26,8 +26,12 @@
     {% for p in posts %}
         <tr>
             <td>{{ p.title }}</td>
-            <td>{{ p.category_id }}</td>
-            <td>{{ p.tags }}</td>
+            <td>{% if p.category_id == 1 %}编程
+                {% elif p.category_id == 2 %}读书
+                {% else %}生活
+                {% endif %}
+            </td>
+            <td>{{ p.tags or '' }}</td>
             <td>{{ p.post_time }}</td>
 
             <td>

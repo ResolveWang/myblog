@@ -1,8 +1,9 @@
 import time
 from html.parser import unescape
 from flask import render_template, request
+from sqlalchemy import and_
 from app.main import app, db
-from gl import page_per_limit, hot_page_limit
+import gl
 from app.models import Post, Tag, PostTag
 
 
@@ -12,7 +13,8 @@ def index():
     page_num = request.args.get('page_num')
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.filter_by(status=1).order_by(Post.post_time.desc()).paginate(int(page_num), page_per_limit, True)
+    paginate = Post.query.filter_by(status=1).filter(Post.category_id > 0).order_by(Post.post_time.desc()).\
+        paginate(int(page_num), gl.index_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))[0:-9]
@@ -24,7 +26,7 @@ def index():
 
 @app.route('/detail/<int:pid>')
 def get_detail(pid):
-    post = Post.query.filter_by(id=pid).filter_by(status=1).first_or_404()
+    post = Post.query.filter_by(id=pid).filter_by(status=1).filter(Post.category_id > 0).first_or_404()
     post.view_counts += 1
     db.session.commit()
     pre_post = Post.query.order_by(Post.id.desc()).filter_by(status=1).filter(Post.id < pid).first()
@@ -41,7 +43,7 @@ def get_bycategory(cid, page_num):
     if not page_num or int(page_num) < 1:
         page_num = 1
     paginate = Post.query.order_by(Post.post_time.desc()).filter_by(category_id=cid).filter_by(status=1).paginate(
-        int(page_num), page_per_limit, True)
+        int(page_num), gl.index_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d', time.localtime(p.post_time))
@@ -56,8 +58,8 @@ def archive():
     page_num = request.args.get('page_num')
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.filter_by(status=1).order_by(Post.post_time.desc()).paginate(int(page_num), page_per_limit,
-                                                                                       True)
+    paginate = Post.query.filter_by(status=1).filter(Post.category_id > 0).order_by(Post.post_time.desc())\
+        .paginate(int(page_num), gl.archive_page_limit, True)
     posts = paginate.items
     datas = []
     flag = ''
@@ -79,8 +81,8 @@ def get_bytag(tid):
     page_num = request.args.get('page_num')
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.filter_by(status=1).filter(Post.id == PostTag.post_id).filter(PostTag.tag_id == tid).\
-        order_by(Post.post_time.desc()).paginate(int(page_num), page_per_limit, True)
+    paginate = Post.query.filter_by(status=1).filter(Post.id == PostTag.post_id).filter(and_(PostTag.tag_id == tid,
+                Post.category_id > 0)).order_by(Post.post_time.desc()).paginate(int(page_num), gl.archive_page_limit, True)
     posts = paginate.items
     datas = []
     flag = ''
@@ -101,7 +103,7 @@ def get_bytag(tid):
 def about():
     hot_posts = _get_hot()
     tags = _get_tags()
-    post = Post.query.filter_by(title='blog').first_or_404()
+    post = Post.query.filter(Post.category_id == 0).first_or_404()
     post.content = unescape(post.content)
     return render_template('about.html', title='关于作者', hot=hot_posts, tags=tags, post=post)
 
@@ -118,7 +120,7 @@ def server_error(e):
 
 def _get_hot():
     return Post.query.filter_by(status=1).order_by(Post.view_counts.desc(), Post.comment_counts.desc(),
-                                                   Post.post_time.desc()).limit(hot_page_limit).offset(0)
+                                                   Post.post_time.desc()).limit(gl.hot_page_limit).offset(0)
 
 
 def _get_tags():

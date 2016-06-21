@@ -7,7 +7,7 @@ from markdown import markdown
 from admin.models import Post, Tag, PostTag, User
 from admin.main import app, db
 from sqlalchemy import or_, and_
-from gl import page_per_limit
+from gl import archive_page_limit
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -15,10 +15,10 @@ def login():
     if request.method == 'POST':
         username = request.values.get('username')
         password = request.values.get('password')
-        remember_me = True if request.values.get('remember_me') == 'true' else False
+        # remember_me = True if request.values.get('remember_me') == 'true' else False
         user = User.query.filter(and_(User.name == username, User.password == password)).first()
         if user is not None:
-            login_user(user, remember=remember_me)
+            login_user(user)
             return jsonify(redirect_url=url_for('admin_index'), results='success')
         else:
             return jsonify(results='fail')
@@ -47,7 +47,7 @@ def article_list():
     page_num = request.args.get('page_num')
     if not page_num:
         page_num = 1
-    paginate = Post.query.order_by(Post.id.desc()).paginate(int(page_num), page_per_limit, True)
+    paginate = Post.query.order_by(Post.id.desc()).paginate(int(page_num), archive_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))
@@ -146,7 +146,7 @@ def article_search():
         page_num = int(request.args.get('page_num'))
 
     paginate = Post.query.filter(or_(Post.title.like('%' + keyword + '%'), Post.content.like('%' + keyword + '%'))) \
-        .paginate(page_num, page_per_limit, True)
+        .paginate(page_num, archive_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))

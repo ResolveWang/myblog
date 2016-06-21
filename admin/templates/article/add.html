@@ -23,7 +23,7 @@
         <div class="content_notice" style="width:90%;margin: 10px auto;"></div>
         <div style="width:90%;margin: 10px auto;" class="tags">
             <h3>添加标签</h3>
-            <input style="width:30%;height: 30px;" placeholder="多个标签请用英文‘,’隔开"
+            <input style="width:30%;height: 30px;" placeholder="多个标签请用英文‘,’隔开;如果是作者简介，那么就不需要添加标签"
                    {% if post.tags %}value="{{ post.tags }}{% endif %}"/>
         </div>
         <div style="width:90%;margin: 10px auto;" class="category">
@@ -32,6 +32,7 @@
                 <option value="1"  {% if post.category_id == 1 %}selected{% endif %}>编程</option>
                 <option value="2" {% if post.category_id == 2 %}selected{% endif %}>读书</option>
                 <option value="3" {% if post.category_id == 3 %}selected{% endif %}>生活</option>
+                <option value="0" {% if post.category_id == 0 %}selected{% endif %}>关于作者</option>
             </select>
         </div>
         <div style="width:90%;margin: 10px auto;">
