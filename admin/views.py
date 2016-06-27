@@ -1,12 +1,12 @@
-import time
-import bleach
+import time, os, bleach
 from random import randint
 from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_user, logout_user, login_required
 from markdown import markdown
+from sqlalchemy import or_, and_
+from werkzeug.utils import secure_filename
 from admin.models import Post, Tag, PostTag, User
 from admin.main import app, db
-from sqlalchemy import or_, and_
 from gl import archive_page_limit
 
 
@@ -151,6 +151,26 @@ def article_search():
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))
     return render_template('/article/search.html', pagination=paginate, posts=posts, keyword=keyword)
+
+
+@app.route('/admin/article/pic_upload', methods=['POST', 'GET'])
+def upload():
+    if request.method == 'GET':
+        return render_template('/article/pic_upload.html')
+    else:
+        file = request.files.get('fileList')
+        if file and _allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            print(filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return jsonify(rea="<h1>{url}</h1>".format(url=os.path.join(app.config['UPLOAD_FOLDER'], filename)), res='suc')
+        else:
+            return jsonify(rea='文件类型有错', res='error')
+
+
+def _allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 
 @app.errorhandler(404)
