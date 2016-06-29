@@ -34,6 +34,7 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/')
 @app.route('/admin/')
 @app.route('/admin/index')
 @login_required
