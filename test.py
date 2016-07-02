@@ -1,1 +1,2 @@
-from run import app as application
+a = 'Asdsas'
+print(a.lower())

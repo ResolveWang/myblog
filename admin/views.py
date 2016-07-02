@@ -161,8 +161,7 @@ def upload():
     else:
         file = request.files.get('fileList')
         if file and _allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            print(filename)
+            filename = (secure_filename(file.filename)).lower()
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return jsonify(rea="<h1>{url}</h1>".format(url=os.path.join(app.config['UPLOAD_FOLDER'], filename)), res='suc')
         else:
