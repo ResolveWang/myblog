@@ -63,9 +63,8 @@ def article_add():
         tags_str = request.values.get('tags')
         category = int(request.values.get('category'))
         cont = request.values.get('cont')
-        cont_html = bleach.linkify(bleach.clean(
-            markdown(cont)
-        ))
+        cont_html = markdown(cont)
+        # post.content = markdown(post.markdown_source)
         post_time = int(time.time())
         post = Post(title=title, cont=cont_html, marksource=cont, post_time=post_time, category=category,
                     tags_str=tags_str)
@@ -97,9 +96,9 @@ def article_edit(pid):
         tag_list = post.tags.split(',')
         post.cacategory_id = int(request.values.get('category'))
         post.markdown_source = request.values.get('cont')
-        post.content = bleach.linkify(bleach.clean(
+        post.content = bleach.clean(
             markdown(post.markdown_source)
-        ))
+        )
 
         for tag in tag_list:
             t = Tag.query.filter_by(name=tag).first()
