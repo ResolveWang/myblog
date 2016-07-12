@@ -114,6 +114,12 @@ def about():
     return render_template('about.html', title='关于作者', hot=hot_posts, tags=tags, post=post)
 
 
+# 纪念日
+@app.route('/pm/love/xq')
+def love():
+    return render_template('lover.html')
+
+
 @app.errorhandler(404)
 def not_found(e):
     return render_template('error.html', title='404', message='你要找的页面不存在...')
