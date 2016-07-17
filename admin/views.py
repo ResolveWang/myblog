@@ -47,7 +47,20 @@ def article_list():
     page_num = request.args.get('page_num')
     if not page_num:
         page_num = 1
-    paginate = Post.query.filter_by(store_type=1).order_by(Post.id.desc()).paginate(int(page_num), archive_page_limit, True)
+    paginate = Post.query.filter_by(stype=1).order_by(Post.id.desc()).paginate(int(page_num), archive_page_limit, True)
+    posts = paginate.items
+    for p in posts:
+        p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))
+    return render_template('/article/index.html', pagination=paginate, posts=posts)
+
+
+@app.route('/admin/article/draft')
+@login_required
+def draft_list():
+    page_num = request.args.get('page_num')
+    if not page_num:
+        page_num = 1
+    paginate = Post.query.filter_by(stype=2).order_by(Post.id.desc()).paginate(int(page_num), archive_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))

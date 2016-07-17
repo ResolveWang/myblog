@@ -118,6 +118,7 @@
             }else{
                 $.post('/admin/article/add', {title: title, cont: cont, tags: tags, category: category, store:v});
                 $('.blog_cont .post_notice').append('<div><span id="c_notice" style="color:red;">保存成功</span></div>');
+                window.setTimeout(function(){$('.post_notice').remove()},2000);
             }
 
         {% endif %}

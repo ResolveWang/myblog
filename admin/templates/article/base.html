@@ -23,26 +23,8 @@
         <th>操作</th>
     </tr>
     </thead>
-    {% for p in posts %}
-        <tr>
-            <td>{{ p.title }}</td>
-            <td>{% if p.category_id == 0 %}关于作者
-                {% elif p.category_id == 1 %}编程
-                {% elif p.category_id == 2 %}读书
-                {% else %}生活
-                {% endif %}
-            </td>
-            <td>{{ p.tags or '' }}</td>
-            <td>{{ p.post_time }}</td>
-
-            <td>
-                <a href="http://www.rookiefly.me:80/detail/{{ p.id }}" target="_blank">查看</a>
-                <a href="/admin/article/edit/{{ p.id }}">编辑</a>
-                <a href="/admin/article/show/{{ p.id }}">{% if p.status == 1 %}隐藏{% else %}展示{% endif %}</a>
-                <a href="/admin/article/delete/{{ p.id }}" onclick="return confirm('真的要删除吗？');">删除</a>
-            </td>
-        </tr>
-    {% endfor %}
+{% block opera %}
+{% endblock %}
 </table>
 <div class="inline pull-right page">
     {{ pagination.total }} 条记录 {{ pagination.page }}/{{ pagination.pages }} 页

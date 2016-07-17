@@ -14,8 +14,8 @@ def index():
     page_num = request.args.get('page_num')
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.filter_by(status=1).filter(Post.category_id > 0).order_by(Post.post_time.desc()).\
-        paginate(int(page_num), gl.index_page_limit, True)
+    paginate = Post.query.filter_by(status=1).filter_by(stype=1).filter(Post.category_id > 0).\
+        order_by(Post.post_time.desc()).paginate(int(page_num), gl.index_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.comment_counts = get_comments(p.id)
@@ -28,7 +28,8 @@ def index():
 
 @app.route('/detail/<int:pid>')
 def get_detail(pid):
-    post = Post.query.filter_by(id=pid).filter_by(status=1).filter(Post.category_id > 0).first_or_404()
+    post = Post.query.filter_by(id=pid).filter_by(status=1).filter_by(stype=1).filter(Post.category_id > 0).\
+        first_or_404()
     post.view_counts += 1
     db.session.commit()
     pre_post = Post.query.order_by(Post.id.desc()).filter_by(status=1).filter(Post.id < pid).first()
@@ -45,8 +46,8 @@ def get_detail(pid):
 def get_bycategory(cid, page_num):
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.order_by(Post.post_time.desc()).filter_by(category_id=cid).filter_by(status=1).paginate(
-        int(page_num), gl.index_page_limit, True)
+    paginate = Post.query.order_by(Post.post_time.desc()).filter_by(stype=1).filter_by(category_id=cid).\
+        filter_by(status=1).paginate(int(page_num), gl.index_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.comment_counts = get_comments(p.id)
@@ -62,8 +63,8 @@ def archive():
     page_num = request.args.get('page_num')
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.filter_by(status=1).filter(Post.category_id > 0).order_by(Post.post_time.desc())\
-        .paginate(int(page_num), gl.archive_page_limit, True)
+    paginate = Post.query.filter_by(status=1).filter_by(stype=1).filter(Post.category_id > 0).\
+        order_by(Post.post_time.desc()).paginate(int(page_num), gl.archive_page_limit, True)
     posts = paginate.items
     datas = []
     flag = ''
@@ -86,8 +87,9 @@ def get_bytag(tid):
     page_num = request.args.get('page_num')
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.filter_by(status=1).filter(Post.id == PostTag.post_id).filter(and_(PostTag.tag_id == tid,
-                Post.category_id > 0)).order_by(Post.post_time.desc()).paginate(int(page_num), gl.archive_page_limit, True)
+    paginate = Post.query.filter_by(status=1).filter_by(stype=1).filter(Post.id == PostTag.post_id).\
+        filter(and_(PostTag.tag_id == tid,Post.category_id > 0)).order_by(Post.post_time.desc()).\
+        paginate(int(page_num), gl.archive_page_limit, True)
     posts = paginate.items
     datas = []
     flag = ''

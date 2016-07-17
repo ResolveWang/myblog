@@ -10,13 +10,13 @@ class Post(db.Model):
     content = db.Column(db.Text)
     markdown_source = db.Column(db.Text)
     category_id = db.Column(db.Integer)
-    stype = db.Column(db.Integer)
     tags = db.Column(db.String)
     post_time = db.Column(db.Integer)
     comment_counts = db.Column(db.Integer, default=0)
     view_counts = db.Column(db.Integer, default=0)
     like_counts = db.Column(db.Integer, default=0)
     status = db.Column(db.Integer, default=1)
+    stype = db.Column(db.Integer, default=1)
 
     def __init__(self, title, cont, marksource, category, tags_str, post_time, stype):
         self.title = title
@@ -25,8 +25,8 @@ class Post(db.Model):
         self.category_id = category
         self.tags = tags_str
         self.post_time = post_time
-        self.stpye = stype
-        # print(self.stype)
+        self.stype = stype
+        print(self.stype)
         # print(stype)
 
     def __str__(self):
