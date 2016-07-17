@@ -15,7 +15,6 @@ def login():
     if request.method == 'POST':
         username = request.values.get('username')
         password = request.values.get('password')
-        # remember_me = True if request.values.get('remember_me') == 'true' else False
         user = User.query.filter(and_(User.name == username, User.password == password)).first()
         if user is not None:
             login_user(user)
@@ -48,7 +47,7 @@ def article_list():
     page_num = request.args.get('page_num')
     if not page_num:
         page_num = 1
-    paginate = Post.query.order_by(Post.id.desc()).paginate(int(page_num), archive_page_limit, True)
+    paginate = Post.query.filter_by(store_type=1).order_by(Post.id.desc()).paginate(int(page_num), archive_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))
@@ -62,12 +61,13 @@ def article_add():
         title = request.values.get('title')
         tags_str = request.values.get('tags')
         category = int(request.values.get('category'))
+        store_type = int(request.values.get('store'))
         cont = request.values.get('cont')
         cont_html = markdown(cont)
         # post.content = markdown(post.markdown_source)
         post_time = int(time.time())
         post = Post(title=title, cont=cont_html, marksource=cont, post_time=post_time, category=category,
-                    tags_str=tags_str)
+                    tags_str=tags_str, stype=store_type)
         db.session.add(post)
         # 下面这行代码用于获取自增长的主键
         db.session.flush()
@@ -103,8 +103,10 @@ def article_edit(pid):
         for tag in tag_list:
             t = Tag.query.filter_by(name=tag).first()
             if not t and tag.strip() != '':
-                t = Tag(name=tag)
-                db.session.add(t)
+                size = randint(12, 20)
+                rgb = 'rgb({R},{G},{B})'.format(R=randint(0, 254), G=randint(0, 254), B=randint(0, 254))
+                t2 = Tag(tag, size, rgb)
+                db.session.add(t2)
                 db.session.flush()
                 db.session.add(PostTag(post.id, t.id))
             else:

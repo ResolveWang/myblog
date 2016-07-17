@@ -20,34 +20,53 @@
         <div id="test-editormd">
             <textarea style="display:none;">{% if post %}{{ post.markdown_source }}{% endif %}</textarea>
         </div>
-        <div class="content_notice" style="width:90%;margin: 10px auto;"></div>
-        <div style="width:90%;margin: 10px auto;" class="tags">
-            <h3>添加标签</h3>
-            <input style="width:30%;height: 30px;" placeholder="多个标签请用英文‘,’隔开;如果是作者简介，那么就不需要添加标签"
+        <div class="content_notice" style="width:90%;margin:0 auto;"></div>
+
+        <div style="width:30%;margin:auto 5%;display: inline-block;" class="tags">
+            <h4>添加标签</h4>
+            <input style="width:90%;height: 30px;" placeholder="多个标签请用英文‘,’隔开;如果是作者简介，那么就不需要添加标签"
                    {% if post.tags %}value="{{ post.tags }}{% endif %}"/>
         </div>
-        <div style="width:90%;margin: 10px auto;" class="category">
-            <h3>选择归类</h3>
-            <select style="width:5%;height: 30px;">
-                <option value="1"  {% if post.category_id == 1 %}selected{% endif %}>编程</option>
+
+        <div style="margin: auto auto;display: inline-block" class="category">
+            <h4>选择归类</h4>
+            <select style="width:100%;height: 30px;">
+                <option value="1" {% if post.category_id == 1 %}selected{% endif %}>编程</option>
                 <option value="2" {% if post.category_id == 2 %}selected{% endif %}>读书</option>
                 <option value="3" {% if post.category_id == 3 %}selected{% endif %}>生活</option>
                 <option value="0" {% if post.category_id == 0 %}selected{% endif %}>关于作者</option>
             </select>
         </div>
-        <div style="width:90%;margin: 10px auto;">
+
+        <div style="width:90%;margin:25px auto 0 auto;">
             <button
                     style="margin-bottom: 20px;background: #1B3160;padding: 7px 10px;border-radius: 4px;border: 1px solid blue;color: rgb(255, 255, 255);font-weight: bold;"
-                    class="sub_cont btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">发布内容
+                    class="sub_cont btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm" target="post">发布内容
             </button>
+            {% if not post %}
+            <button
+                    style="margin-bottom: 20px;background: #1B3160;padding: 7px 10px;border-radius: 4px;border: 1px solid blue;color: rgb(255, 255, 255);font-weight: bold;"
+                    class="sub_cont btn btn-primary" data-toggle="modal" data-target=".bs-modal-draft" target="draft">保存草稿
+            </button>
+            {% endif %}
         </div>
-        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+
+        <div class="modal fade .bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content" style="font-size: 35px;color: green;text-align: center;">
                     发布成功
                 </div>
             </div>
         </div>
+        <div class="post_notice" style="width:90%;margin:0 auto;"></div>
+        <!--bootstrap的模态框data-target命名:bs-modal-* 之类才有效-->
+{#        <div class="modal fade bs-modal-draft" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="modal">#}
+{#            <div class="modal-dialog modal-sm">#}
+{#                <div class="modal-content" style="font-size: 35px;color: green;text-align: center;">#}
+{#                    保存成功#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
     </div>
 </div>
 <script src="{{ url_for('static', filename='markdown/examples/js/jquery.min.js') }}"></script>
@@ -63,6 +82,11 @@
         });
     });
     $(".blog_cont .sub_cont").click(function () {
+        var v = 1;
+        var t = $(this).attr('target');
+        if(t == 'draft'){
+            v = 2;
+        }
         var title = $('.blog_cont .title input').val().replace(/^\s*/, '');
         var cont = $('.blog_cont #test-editormd textarea').val().replace(/^\s*/, '');
         var category = $('.blog_cont .category select').val();
@@ -82,13 +106,20 @@
         }
         {% if post %}
             $.post('/admin/article/edit/{{ post.id }}', {title: title, cont: cont, tags: tags, category: category},
-            function () {
-                location.assign('/admin/article/index');
-            });
+                    function () {
+                        location.assign('/admin/article/index');
+                    });
         {% else %}
-            $.post('/admin/article/add', {title: title, cont: cont, tags: tags, category: category}, function () {
-                location.assign('/admin/article/index');
-            });
+            if(v === 1){
+                $.post('/admin/article/add', {title: title, cont: cont, tags: tags, category: category, store:v},
+                    function () {
+                                location.assign('/admin/article/index');
+                    });
+            }else{
+                $.post('/admin/article/add', {title: title, cont: cont, tags: tags, category: category, store:v});
+                $('.blog_cont .post_notice').append('<div><span id="c_notice" style="color:red;">保存成功</span></div>');
+            }
+
         {% endif %}
     });
 </script>
