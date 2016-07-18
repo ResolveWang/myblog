@@ -64,7 +64,7 @@ def draft_list():
     posts = paginate.items
     for p in posts:
         p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))
-    return render_template('/article/index.html', pagination=paginate, posts=posts)
+    return render_template('/article/draft.html', pagination=paginate, posts=posts)
 
 
 @app.route('/admin/article/add', methods=['GET', 'POST'])
@@ -104,6 +104,7 @@ def article_add():
 def article_edit(pid):
     post = db.session.query(Post).filter_by(id=int(pid)).first()
     if request.method == 'POST':
+        post.stype = 1
         post.title = request.values.get('title')
         post.tags = request.values.get('tags')
         tag_list = post.tags.split(',')
@@ -134,9 +135,13 @@ def article_edit(pid):
 @login_required
 def article_delete(pid):
     post = db.session.query(Post).filter_by(id=int(pid)).first()
+    p_type = post.stype
     db.session.delete(post)
     db.session.commit()
-    return redirect(url_for('article_list'))
+    if p_type == 1:
+        return redirect(url_for('article_list'))
+    else:
+        return redirect(url_for('draft_list'))
 
 
 @app.route('/admin/article/show/<string:pid>')
