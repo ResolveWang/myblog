@@ -32,8 +32,8 @@ def get_detail(pid):
         first_or_404()
     post.view_counts += 1
     db.session.commit()
-    pre_post = Post.query.order_by(Post.id.desc()).filter_by(status=1).filter(Post.id < pid).first()
-    next_post = Post.query.order_by(Post.id.asc()).filter(Post.id > pid).filter_by(status=1).first()
+    pre_post = Post.query.order_by(Post.id.desc()).filter_by(status=1).filter_by(stype=1).filter(Post.id < pid).first()
+    next_post = Post.query.order_by(Post.id.asc()).filter(Post.id > pid).filter_by(status=1).filter_by(stype=1).first()
     post.post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
     post.comment_counts = get_comments(post.id)
     post.content = unescape(post.content)

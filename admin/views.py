@@ -107,26 +107,27 @@ def article_edit(pid):
         post.stype = 1
         post.title = request.values.get('title')
         post.tags = request.values.get('tags')
-        tag_list = post.tags.split(',')
         post.cacategory_id = int(request.values.get('category'))
         post.markdown_source = request.values.get('cont')
         post.content = bleach.clean(
             markdown(post.markdown_source)
         )
 
-        for tag in tag_list:
-            t = Tag.query.filter_by(name=tag).first()
-            if not t and tag.strip() != '':
-                size = randint(12, 20)
-                rgb = 'rgb({R},{G},{B})'.format(R=randint(0, 254), G=randint(0, 254), B=randint(0, 254))
-                t2 = Tag(tag, size, rgb)
-                db.session.add(t2)
-                db.session.flush()
-                db.session.add(PostTag(post.id, t.id))
-            else:
-                r = PostTag.query.filter_by(post_id=post.id).filter_by(tag_id=t.id).first()
-                if not r:
-                    db.session.add(PostTag(post.id, t.id))
+        if post.tags != '':
+            tag_list = post.tags.split(',')
+            for tag in tag_list:
+                t = Tag.query.filter_by(name=tag).first()
+                if not t and tag.strip() != '':
+                    size = randint(12, 20)
+                    rgb = 'rgb({R},{G},{B})'.format(R=randint(0, 254), G=randint(0, 254), B=randint(0, 254))
+                    t2 = Tag(tag, size, rgb)
+                    db.session.add(t2)
+                    db.session.flush()
+                    db.session.add(PostTag(post.id, t2.id))
+                elif t:
+                    r = PostTag.query.filter_by(post_id=post.id).filter_by(tag_id=t.id).first()
+                    if not r:
+                        db.session.add(PostTag(post.id, t.id))
         db.session.commit()
     return render_template('/article/add.html', post=post)
 

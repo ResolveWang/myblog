@@ -43,7 +43,7 @@
                     style="margin-bottom: 20px;background: #1B3160;padding: 7px 10px;border-radius: 4px;border: 1px solid blue;color: rgb(255, 255, 255);font-weight: bold;"
                     class="sub_cont btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm" target="post">发布内容
             </button>
-            {% if not post %}
+            {% if not post or post.stype == 2 %}
             <button
                     style="margin-bottom: 20px;background: #1B3160;padding: 7px 10px;border-radius: 4px;border: 1px solid blue;color: rgb(255, 255, 255);font-weight: bold;"
                     class="sub_cont btn btn-primary" data-toggle="modal" data-target=".bs-modal-draft" target="draft">保存草稿

@@ -26,7 +26,6 @@ class Post(db.Model):
         self.tags = tags_str
         self.post_time = post_time
         self.stype = stype
-        print(self.stype)
         # print(stype)
 
     def __str__(self):
