@@ -19,7 +19,7 @@ def index():
     posts = paginate.items
     for p in posts:
         p.comment_counts = get_comments(p.id)
-        p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))[0:-9]
+        p.post_time = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))[0:-9])
         p.content = unescape(p.content)
     hot_posts = _get_hot()
     tags = _get_tags()
