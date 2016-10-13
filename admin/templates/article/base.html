@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/ckform.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/common.js') }}"></script>
+</head>
+<body class="article_base">
+{% block head_info %}
+{% endblock %}
+<table class="table table-bordered table-hover definewidth m10">
+    <thead>
+    <tr>
+        <th>标题</th>
+        <th>分类目录</th>
+        <th>标签</th>
+        <th>发布日期</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+{% block opera %}
+{% endblock %}
+</table>
+<div class="inline pull-right page">
+    {{ pagination.total }} 条记录 {{ pagination.page }}/{{ pagination.pages }} 页
+    {% if pagination.has_prev %}
+        {% block prev_page %}
+        {% endblock %}
+    {% endif %}
+    {% for page in pagination.iter_pages() %}
+        {% if page %}
+            {% if page != pagination.page %}
+                {% block cur_page %}
+                {% endblock %}
+            {% else %}
+                <strong>{{ page }}</strong>
+            {% endif %}
+        {% else %}
+            <span>…</span>
+        {% endif %}
+    {%- endfor %}
+
+    {% if pagination.has_next %}
+        {% block next_page %}
+        {% endblock %}
+    {% endif %}
+</div>
+{% block pag_init %}
+{% endblock %}
+</body>
+{% block js_script %}
+{% endblock %}
+</html>

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="blog-archive">
+        {% for data in datas %}
+        {% if data['year'] != '' %}
+            <h2 class="blog-post-time">{{ data['year'] }}</h2>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-3 time">{{ data['post'].post_time }}</div>
+            <div class="col-md-1"></div>
+            <div class="col-md-7 title">
+                <a href="{{ url_for('get_detail', pid=data['post'].id) }}">{{ data['post'].title }}</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block page_nagite %}
+    <div class="col-md-2"></div>
+    <ul class="pagination">
+    <li {% if pagination.page<2 %}class="disabled"{% endif %}>
+      <a href="{{ url_for('archive', page_num=pagination.prev_num) }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% for page in pagination.iter_pages() %}
+    <li>
+        <a href="{{ url_for('archive', page_num=page) }}">
+        {% if page %}
+            {% if page == pagination.page %}
+                <strong><em>{{ page }}</em></strong>
+            {% else %}
+                {{ page }}
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+        </a>
+    </li>
+    {% endfor %}
+    <li {% if pagination.page ==pagination.pages %}class="disabled"{% endif %}>
+      <a href="{{ url_for('archive', page_num=pagination.next_num) }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+{% endblock %}

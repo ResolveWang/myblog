@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for p in posts %}
+        <div class="blog-post">
+            <h2 class="blog-post-title"><a class="article_link" title="查看详细"
+                                           href="{{ url_for('get_detail', pid=p.id) }}">{{ p.title }}</a></h2>
+            {% include 'meta.html' %}
+            <p>{{ p.content | striptags | truncate(200, false, '...') }}</p>
+            <p><a class="get_detail" href="{{ url_for('get_detail', pid=p.id) }}" title="查看详细信息">more</a></p>
+            <hr>
+        </div>
+    {% endfor %}
+{% endblock %}
+{% block page_nagite %}
+<nav>
+                {% block page %}
+                <ul class="pager">
+                    <li {% if not pagination.has_prev %} class="disabled" {% endif %}>
+                        <a href="{{ url_for('get_bycategory', cid=cid, page_num=pagination.prev_num) }}">前一页</a>
+                    </li>
+                    <li{% if not pagination.has_next %} class="disabled" {% endif %}>
+                        <a href="{{ url_for('get_bycategory', cid=cid, page_num=pagination.next_num) }}">后一页</a>
+                    </li>
+                </ul>
+                {% endblock %}
+            </nav>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% include 'head.html' %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8 blog-main">
+            <div class="cont">
+                {% block content %}
+                {% endblock %}
+            </div>
+            {% block page_nagite %}
+            {% endblock %}
+        </div>
+
+    {% include 'right.html' %}
+    </div>
+</div>
+
+{% include 'foot.html' %}

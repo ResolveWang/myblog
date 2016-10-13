@@ -1,0 +1,34 @@
+{% extends '/article/base.html' %}
+{% block head_info %}
+{% endblock %}
+{% block opera %}
+       {% for p in posts %}
+        <tr>
+            <td>{{ p.title }}</td>
+            <td>{% if p.category_id == 0 %}关于作者
+                {% elif p.category_id == 1 %}编程
+                {% elif p.category_id == 2 %}读书
+                {% else %}生活
+                {% endif %}
+            </td>
+            <td>{{ p.tags or '' }}</td>
+            <td>{{ p.post_time }}</td>
+            <td>
+                <a href="/admin/article/edit/{{ p.id }}">编辑</a>
+                <a href="/admin/article/delete/{{ p.id }}" onclick="return confirm('真的要删除吗？');">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+{% endblock %}
+{% block prev_page %}
+    <a href="{{ url_for('article_list', page_num=pagination.prev_num) }}">上一页</a>
+{% endblock %}
+{% block cur_page %}
+    <a href="{{ url_for('article_list', page_num=page) }}">{{ page }}</a>
+{% endblock %}
+{% block next_page %}
+    <a href="{{ url_for('article_list', page_num=pagination.next_num) }}">下一页</a>
+{% endblock %}
+{% block js_script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/other.js') }}"></script>
+{% endblock %}

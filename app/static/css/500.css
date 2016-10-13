@@ -1,0 +1,8 @@
+#main {
+	width:1000px;
+	margin:0 auto;
+	background:url(../pic/500.jpg) no-repeat left top;
+	font-size:1.125em;
+	overflow:hidden;
+	position:relative;
+}

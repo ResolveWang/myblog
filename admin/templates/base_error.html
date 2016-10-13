@@ -1,0 +1,21 @@
+<HTML
+xmlns="http://www.w3.org/1999/xhtml"><HEAD>
+<META http-equiv=X-UA-Compatible content=IE=EmulateIE7>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<LINK type=text/css rel=stylesheet href="{{ url_for('static', filename='css/error.css') }}">
+<META content="MSHTML 6.00.2900.5969" name=GENERATOR></HEAD>
+<BODY>
+<DIV class=bg>
+<DIV class=cont>
+<DIV class=c1><IMG class=img1 src="{{ url_for('static', filename='images/01.png') }}"></DIV>
+<H2>{% block reason %}{% endblock %}</H2>
+<DIV class=c2><A class=re href="{{ url_for('article_list') }}">返回首页</A></DIV>
+</DIV></DIV></BODY>
+<script type="text/javascript">
+    function redrect()
+    {
+    window.location = history.go(-1);
+    }
+    window.setTimeout(redrect,3000);// 跳转函数
+</script>
+</HTML>

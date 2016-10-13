@@ -1,0 +1,28 @@
+<div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+
+    <div class="sidebar-module">
+        <h3>标签</h3>
+        <article id="page-undefined" class="article article-type-page" itemscope>
+            <div class="tags" id="tags" style="display:none;width: 40px;">
+                <ul>
+                    {% for tag in tags %}
+                        <li>
+                            <a style="font-size:{{ tag.size }}px;color:{{ tag.RGB }};" href="{{ url_for('get_bytag', tid=tag.id) }}">{{ tag.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="myTags">
+                <canvas width="200" height="200" id="my3DTags"><p>标签云</p></canvas>
+            </div>
+        </article>
+    </div>
+    <div class="sidebar-module">
+        <h3>最热文章</h3>
+        <ol class="list-unstyled">
+            {% for p in hot %}
+            <li><a href="{{ url_for('get_detail', pid=p.id) }}" class="hot">{{ p.title }}</a></li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
