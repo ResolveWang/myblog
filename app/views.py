@@ -1,6 +1,6 @@
 import time
 from html.parser import unescape
-from flask import render_template, request
+from flask import render_template, request, jsonify, make_response
 from sqlalchemy import and_
 from app.main import app, db
 import gl
@@ -19,7 +19,7 @@ def index():
     posts = paginate.items
     for p in posts:
         p.comment_counts = get_comments(p.id)
-        p.post_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))[0:-9]
+        p.post_time = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))[0:-9])
         p.content = unescape(p.content)
     hot_posts = _get_hot()
     tags = _get_tags()
@@ -115,6 +115,11 @@ def about():
     return render_template('about.html', title='关于作者', hot=hot_posts, tags=tags, post=post)
 
 
+@app.route('/ip')
+def get_ip():
+    return make_response(jsonify({'ip': request.headers['X-Real-Ip']}))
+
+
 # 纪念日
 @app.route('/pm/love/xq')
 def love():
@@ -138,3 +143,7 @@ def _get_hot():
 
 def _get_tags():
     return Tag.query.all()
+
+@app.route('/ip')
+def get_ip():
+    return make_response(jsonify({'ip': request.headers['X-Real-Ip']}))
