@@ -2,12 +2,12 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="c5a9976e-1aa2-4c9c-aed2-6d7bd31f75fe" name="blog" url="http://123.206.21.165">
-        <fileTransfer host="123.206.21.165" port="21">
+      <webServer id="134c104f-d571-486a-a4b1-2e49f53317b9" name="blog" url="http://115.29.136.51">
+        <fileTransfer host="115.29.136.51" port="8999" accessType="SFTP" password="df9bdf98df99df9edf9fdf9c" username="wpm">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+            <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>
-          <option name="port" value="21" />
+          <option name="port" value="8999" />
         </fileTransfer>
       </webServer>
     </option>

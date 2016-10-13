@@ -1,8 +1,8 @@
 from flask import Flask
-from app.base import MySQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object('config')
-db = MySQLAlchemy(app)
+db = SQLAlchemy(app)
 
 
