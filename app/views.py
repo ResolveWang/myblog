@@ -1,6 +1,6 @@
 import time
 from html.parser import unescape
-from flask import render_template, request
+from flask import render_template, request, jsonify, make_response
 from sqlalchemy import and_
 from app.main import app, db
 import gl
@@ -115,6 +115,11 @@ def about():
     return render_template('about.html', title='关于作者', hot=hot_posts, tags=tags, post=post)
 
 
+@app.route('/ip')
+def get_ip():
+    return make_response(jsonify({'ip': request.headers['X-Real-Ip']}))
+
+
 # 纪念日
 @app.route('/pm/love/xq')
 def love():
@@ -138,3 +143,7 @@ def _get_hot():
 
 def _get_tags():
     return Tag.query.all()
+
+@app.route('/ip')
+def get_ip():
+    return make_response(jsonify({'ip': request.headers['X-Real-Ip']}))
