@@ -1,3 +1,4 @@
 conf.yaml
 *.py[cod]
-*.xml
+*.
+test.py
