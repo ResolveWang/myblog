@@ -36,16 +36,12 @@
                             <input id="password" name="password" required="required" type="password" placeholder="请输入密码"/>
                         </p>
                           <div class="login_notice" style="color: red;margin:10px 0;"></div>
-{#                        <p class="keeplogin">#}
-{#                            <input type="checkbox" name="loginkeeping" id="loginkeeping" checked/>#}
-{#                            <label for="loginkeeping">记住密码</label>#}
-{#                        </p>#}
                         <p class="login button">
                             <input type="submit" value="登录"/>
                         </p>
                         <p class="change_link">
                             回到博客首页？
-                            <a href="http://www.rookiefly.me" class="to_register">GO</a>
+                            <a href="http://rookiefly.cn" class="to_register">GO</a>
                         </p>
                     </form>
                 </div>
@@ -59,7 +55,6 @@
     $('#login .login').click(function(){
         var username = $('#username').val().replace('/^\s*/', '');
         var password = $('#password').val();
-{#        var remember_me = $('#loginkeeping').is(':checked');#}
         $.post('{{ url_for("login") }}',{username:username, password:password},function (data) {
             if(data.results == 'success' ){
                 location.assign(data.redirect_url);

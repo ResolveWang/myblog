@@ -144,6 +144,3 @@ def _get_hot():
 def _get_tags():
     return Tag.query.all()
 
-@app.route('/ip')
-def get_ip():
-    return make_response(jsonify({'ip': request.headers['X-Real-Ip']}))
