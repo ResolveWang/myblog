@@ -1,0 +1,17 @@
+bleach==1.5.0
+Flask==0.12
+Flask-Login==0.4.0
+Flask-SQLAlchemy==2.1
+gevent==1.2.1
+greenlet==0.4.12
+gunicorn==19.6.0
+html5lib==0.9999999
+itsdangerous==0.24
+Jinja2==2.9.5
+Markdown==2.6.8
+MarkupSafe==0.23
+PyMySQL==0.7.10
+PyYAML==3.12
+requests==2.13.0
+SQLAlchemy==1.1.5
+Werkzeug==0.11.15
