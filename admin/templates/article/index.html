@@ -22,7 +22,7 @@
             <td>{{ p.tags or '' }}</td>
             <td>{{ p.post_time }}</td>
             <td>
-                <a href="http://www.rookiefly.me:80/detail/{{ p.id }}" target="_blank">查看</a>
+                <a href="http://rookiefly.cn/detail/{{ p.id }}" target="_blank">查看</a>
                 <a href="/admin/article/edit/{{ p.id }}">编辑</a>
                 <a href="/admin/article/delete/{{ p.id }}" onclick="return confirm('真的要删除吗？');">删除</a>
                 <a href="/admin/article/show/{{ p.id }}">{% if p.status == 1 %}隐藏{% else %}展示{% endif %}</a>
