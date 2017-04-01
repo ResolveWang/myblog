@@ -4,7 +4,7 @@ from flask import render_template, request, jsonify, make_response
 from sqlalchemy import and_
 from app.main import app, db
 import gl
-from app.utils import get_comments
+#from app.utils import get_comments
 from app.models import Post, Tag, PostTag
 
 
@@ -18,7 +18,7 @@ def index():
         order_by(Post.post_time.desc()).paginate(int(page_num), gl.index_page_limit, True)
     posts = paginate.items
     for p in posts:
-        p.comment_counts = get_comments(p.id)
+        p.comment_counts = 0
         p.post_time = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))[0:-9])
         p.content = unescape(p.content)
     hot_posts = _get_hot()
@@ -35,7 +35,7 @@ def get_detail(pid):
     pre_post = Post.query.order_by(Post.id.desc()).filter_by(status=1).filter_by(stype=1).filter(Post.id < pid).first()
     next_post = Post.query.order_by(Post.id.asc()).filter(Post.id > pid).filter_by(status=1).filter_by(stype=1).first()
     post.post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
-    post.comment_counts = get_comments(post.id)
+    post.comment_counts = 0
     post.content = unescape(post.content)
     hot = _get_hot()
     tags = _get_tags()
@@ -50,7 +50,7 @@ def get_bycategory(cid, page_num):
         filter_by(status=1).paginate(int(page_num), gl.index_page_limit, True)
     posts = paginate.items
     for p in posts:
-        p.comment_counts = get_comments(p.id)
+        p.comment_counts = 0
         p.post_time = time.strftime('%Y-%m-%d', time.localtime(p.post_time))
         p.content = unescape(p.content)
     hot = _get_hot()
@@ -69,7 +69,7 @@ def archive():
     datas = []
     flag = ''
     for post in posts:
-        post.comment_counts = get_comments(post.id)
+        post.comment_counts = 0
         post.post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
         year = post.post_time[0:4]
         if year != flag:
