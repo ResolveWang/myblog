@@ -2,3 +2,4 @@ conf.yaml
 *.py[cod]
 *.
 test.py
+.idea
