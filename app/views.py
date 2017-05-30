@@ -4,8 +4,7 @@ from flask import render_template, request, jsonify, make_response
 from sqlalchemy import and_
 from app.main import app, db
 import gl
-#from app.utils import get_comments
-from app.models import Post, Tag, PostTag
+from app.models import Post, Tag, PostTag, Views
 
 
 @app.route('/')
@@ -34,12 +33,20 @@ def get_detail(pid):
     db.session.commit()
     pre_post = Post.query.order_by(Post.id.desc()).filter_by(status=1).filter_by(stype=1).filter(Post.id < pid).first()
     next_post = Post.query.order_by(Post.id.asc()).filter(Post.id > pid).filter_by(status=1).filter_by(stype=1).first()
-    post.post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
+    post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
     post.comment_counts = 0
     post.content = unescape(post.content)
     hot = _get_hot()
     tags = _get_tags()
-    return render_template('detail.html', p=post, pre_post=pre_post, next_post=next_post, hot=hot, tags=tags)
+
+    visitor = Views()
+    visitor.u_a = str(request.user_agent)
+    visitor.ip = get_ip()
+    visitor.post_id = pid
+    db.session.add(visitor)
+    db.session.commit()
+
+    return render_template('detail.html', p=post, post_time=post_time, pre_post=pre_post, next_post=next_post, hot=hot, tags=tags)
 
 
 @app.route('/category/<int:cid>/page/<int:page_num>')
@@ -117,7 +124,10 @@ def about():
 
 @app.route('/ip')
 def get_ip():
-    return make_response(jsonify({'ip': request.headers['X-Real-Ip']}))
+    try:
+        return make_response(jsonify({'ip': request.headers['X-Real-Ip']}))
+    except KeyError:
+        return request.remote_addr
 
 
 # 纪念日
