@@ -3,3 +3,5 @@ conf.yaml
 *.
 test.py
 .idea
+.env
+*.pyc
