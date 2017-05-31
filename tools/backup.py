@@ -1,5 +1,6 @@
 import os
 from tools.get_conf import get_db
+import time
 
 
 def blog_backup():
@@ -8,9 +9,9 @@ def blog_backup():
     password = db_args.get('dbpassword')
     dbname = db_args.get('dbname')
     host = db_args.get('host')
-
-    sql = 'mysqldump -u {name} -p{password} -h {address} {dbname} > ./backup.sql'.format \
-        (name=name, password=password, address=host, dbname=dbname)
+    file_name = time.strftime('%Y-%m-%d', time.localtime())
+    sql = 'mysqldump -u {name} -p{password} -h {address} {dbname} > ~/backup/{file}.sql'.format \
+        (name=name, password=password, address=host, dbname=dbname, file=file_name)
     os.system(sql)
 
 

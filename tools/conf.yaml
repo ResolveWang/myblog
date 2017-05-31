@@ -2,13 +2,13 @@ url: http://rookiefly.cn
 
 db:
     host: 127.0.0.1
-    port: 1521
-    dbuser: user
-    dbpassword: 123457
-    dbname: db
+    port: 3306
+    dbuser: root
+    dbpassword: 123456
+    dbname: myblog
 
 sender:
-    account: xx@xxx.com
-    password: xxx
+    account: w796246076@sina.com
+    password: 123456
 
-receiver: xx@xx.com
+receiver: 1796246076@qq.com

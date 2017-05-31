@@ -1,7 +1,8 @@
-import yaml
 import os
+import yaml
 
-conf_path = os.path.join(os.getcwd(), './tools/conf.yaml')
+conf_abspath = os.path.abspath('.')
+conf_path = os.path.join(conf_abspath, 'tools/conf.yaml')
 
 with open(conf_path, encoding='utf-8') as f:
     conf = f.read()

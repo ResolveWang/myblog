@@ -3,3 +3,4 @@ conf.yaml
 *.xml
 test.py
 __pycache__/
+.idea/
