@@ -14,7 +14,13 @@
 - MYSQL Database
 
 
-# Others...
+# how to use it
+- use the file `nginx.conf` to make your own nginx configuration
+- use `gunicorn -c home.conf -k gevent home:app` to start home app
+- user `gunicorn -c myadmin.conf -w 1 myadmin:app` to start admin app
+- or just use supervisor to to all these jobs
+
+# others...
 - welcome to fork and star if you like it or it's useful to you
 - welcome to full a request
 - it will be updated for long
@@ -35,6 +41,12 @@
 - flask框架和它的一些插件
 - bootstrap用于前台页面显示，后台页面是找的模板
 - mysql数据库和sqlalchemy
+
+# 如何使用
+- 使用根目录提供的nginx模版配自己的nginx server
+- 使用`gunicorn -c home.conf -k gevent home:app`来启动*home*应用
+- 使用`gunicorn -c myadmin.conf -w 1 myadmin:app`来启动*admin*应用
+- 或者直接使用supervisor来启动所有应用
 
 # 其他
 - 如果你觉得它还行或者对你有用，欢迎fork和star
