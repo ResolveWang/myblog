@@ -1,10 +1,11 @@
 import time
 from html.parser import unescape
-from flask import render_template, request, jsonify, make_response
+from flask import render_template, request
 from sqlalchemy import and_
 from app.main import app, db
 import gl
-from app.models import Post, Tag, PostTag, Views
+from app import models
+from app.models import Post, Tag, PostTag
 
 
 @app.route('/')
@@ -13,52 +14,48 @@ def index():
     page_num = request.args.get('page_num')
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.filter_by(status=1).filter_by(stype=1).filter(Post.category_id > 0).\
+    paginate = Post.query.filter_by(status=1).filter_by(stype=1).filter(Post.category_id > 0). \
         order_by(Post.post_time.desc()).paginate(int(page_num), gl.index_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.comment_counts = 0
-        p.post_time = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))[0:-9])
+        p.time = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(p.post_time))[0:-9])
         p.content = unescape(p.content)
     hot_posts = _get_hot()
     tags = _get_tags()
-    return render_template('home.html', title='首页',  posts=posts, pagination=paginate, hot=hot_posts, tags=tags)
+    return render_template('home.html', title='首页', posts=posts, pagination=paginate, hot=hot_posts, tags=tags)
 
 
 @app.route('/detail/<int:pid>')
 def get_detail(pid):
-    post = Post.query.filter_by(id=pid).filter_by(status=1).filter_by(stype=1).filter(Post.category_id > 0).\
+    post = Post.query.filter_by(id=pid).filter_by(status=1).filter_by(stype=1).filter(Post.category_id > 0). \
         first_or_404()
     post.view_counts += 1
-    db.session.commit()
+    db.session.flush()
+
     pre_post = Post.query.order_by(Post.id.desc()).filter_by(status=1).filter_by(stype=1).filter(Post.id < pid).first()
     next_post = Post.query.order_by(Post.id.asc()).filter(Post.id > pid).filter_by(status=1).filter_by(stype=1).first()
-    post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
+    post.time = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(post.post_time)))
     post.comment_counts = 0
     post.content = unescape(post.content)
     hot = _get_hot()
     tags = _get_tags()
 
-    visitor = Views()
-    visitor.u_a = str(request.user_agent)
-    visitor.ip = get_ip()
-    visitor.post_id = pid
-    db.session.add(visitor)
-    db.session.commit()
-
-    return render_template('detail.html', p=post, post_time=post_time, pre_post=pre_post, next_post=next_post, hot=hot, tags=tags)
+    _store_visitors(pid)
+    return render_template('detail.html', p=post, pre_post=pre_post, next_post=next_post, hot=hot,
+                           tags=tags)
 
 
 @app.route('/category/<int:cid>/page/<int:page_num>')
 def get_bycategory(cid, page_num):
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.order_by(Post.post_time.desc()).filter_by(stype=1).filter_by(category_id=cid).\
+    paginate = Post.query.order_by(Post.post_time.desc()).filter_by(stype=1).filter_by(category_id=cid). \
         filter_by(status=1).paginate(int(page_num), gl.index_page_limit, True)
     posts = paginate.items
     for p in posts:
         p.comment_counts = 0
-        p.post_time = time.strftime('%Y-%m-%d', time.localtime(p.post_time))
+        p.time = time.strftime('%Y-%m-%d', time.localtime(p.post_time))
         p.content = unescape(p.content)
     hot = _get_hot()
     tags = _get_tags()
@@ -70,14 +67,14 @@ def archive():
     page_num = request.args.get('page_num')
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.filter_by(status=1).filter_by(stype=1).filter(Post.category_id > 0).\
+    paginate = Post.query.filter_by(status=1).filter_by(stype=1).filter(Post.category_id > 0). \
         order_by(Post.post_time.desc()).paginate(int(page_num), gl.archive_page_limit, True)
     posts = paginate.items
     datas = []
     flag = ''
     for post in posts:
         post.comment_counts = 0
-        post.post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
+        post.time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
         year = post.post_time[0:4]
         if year != flag:
             flag = year
@@ -94,14 +91,14 @@ def get_bytag(tid):
     page_num = request.args.get('page_num')
     if not page_num or int(page_num) < 1:
         page_num = 1
-    paginate = Post.query.filter_by(status=1).filter_by(stype=1).filter(Post.id == PostTag.post_id).\
-        filter(and_(PostTag.tag_id == tid,Post.category_id > 0)).order_by(Post.post_time.desc()).\
+    paginate = Post.query.filter_by(status=1).filter_by(stype=1).filter(Post.id == PostTag.post_id). \
+        filter(and_(PostTag.tag_id == tid, Post.category_id > 0)).order_by(Post.post_time.desc()). \
         paginate(int(page_num), gl.archive_page_limit, True)
     posts = paginate.items
     datas = []
     flag = ''
     for post in posts:
-        post.post_time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
+        post.time = time.strftime('%Y-%m-%d', time.localtime(post.post_time))
         year = post.post_time[0:4]
         if year != flag:
             flag = year
@@ -125,7 +122,7 @@ def about():
 @app.route('/ip')
 def get_ip():
     try:
-        return make_response(jsonify({'ip': request.headers['X-Real-Ip']}))
+        return request.headers['X-Real-Ip']
     except KeyError:
         return request.remote_addr
 
@@ -147,10 +144,17 @@ def server_error(e):
 
 
 def _get_hot():
-    return Post.query.filter_by(status=1).filter(Post.category_id > 0 ).order_by(Post.view_counts.desc(),
-                                 Post.comment_counts.desc(), Post.post_time.desc()).limit(gl.hot_page_limit).offset(0)
+    return Post.query.filter_by(status=1).filter(Post.category_id > 0).order_by(Post.view_counts.desc(),
+                                                                                Post.comment_counts.desc(),
+                                                                                Post.post_time.desc()).limit(
+        gl.hot_page_limit).offset(0)
 
 
 def _get_tags():
     return Tag.query.all()
 
+
+def _store_visitors(pid):
+    visitor = models.Visitors(str(request.user_agent), get_ip(), pid)
+    db.session.add(visitor)
+    db.session.commit()

@@ -56,9 +56,14 @@ class PostTag(db.Model):
         self.tag_id = tag_id
 
 
-class Views(db.Model):
-    __tablename__ = 'views'
+class Visitors(db.Model):
+    __tablename__ = 'visitors'
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     u_a = db.Column(db.String(500), default='')
     ip = db.Column(db.String(500), default='')
     post_id = db.Column(db.INTEGER)
+
+    def __init__(self, ua, ip, post_id):
+        self.u_a = ua
+        self.ip = ip
+        self.post_id = post_id
