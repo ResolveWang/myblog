@@ -1,7 +1,7 @@
-conf.yaml
-*.py[cod]
 *.xml
 test.py
 __pycache__/
 .idea/
-
+admin/__pycache__/
+app/__pycache__/
+.env/
