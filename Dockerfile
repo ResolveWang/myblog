@@ -21,4 +21,4 @@ RUN which pip3|xargs -i ln -s {} /usr/bin/pip
 COPY ./myblog/ /home/myblog
 WORKDIR /home/myblog
 RUN pip install -r requirements.txt
-
+CMD ["python", "home.py"]
