@@ -42,7 +42,7 @@ def get_detail(pid):
     tags = _get_tags()
 
     _store_visitors(pid)
-    return render_template('detail.html', p=post, pre_post=pre_post, next_post=next_post, hot=hot,
+    return render_template('detail.html', title=post.title, p=post, pre_post=pre_post, next_post=next_post, hot=hot,
                            tags=tags)
 
 
